@@ -5,6 +5,9 @@ import styles from "./css/App.module.css";
 import { db } from "./firebase";
 import TaskItem from "./components/TaskItem";
 import { makeStyles } from "@material-ui/core";
+import { auth } from "./firebase";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   field: {
@@ -17,10 +20,18 @@ const useStyles = makeStyles({
   },
 });
 
-const App: FC = () => {
+const App: FC = (props: any) => {
   const [tasks, setTasks] = useState([{ id: "", title: "" }]);
   const [input, setInput] = useState("");
   const classes = useStyles();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unSub = auth.onAuthStateChanged((user) => {
+      !user && navigate("login");
+    });
+    return () => unSub();
+  });
 
   useEffect(() => {
     const unSub = db.collection("tasks").onSnapshot((snapshot) => {
@@ -42,6 +53,19 @@ const App: FC = () => {
   return (
     <div className={styles.app__root}>
       <h1>ToDo App by React/Firebase</h1>
+      <button
+        className={styles.app__logout}
+        onClick={async () => {
+          try {
+            await auth.signOut();
+            navigate("login");
+          } catch (error: any) {
+            alert(error.message);
+          }
+        }}
+      >
+        <ExitToAppIcon />
+      </button>
       <br />
       <FormControl>
         <TextField

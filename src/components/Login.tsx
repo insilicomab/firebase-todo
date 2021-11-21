@@ -2,16 +2,19 @@ import { FC, memo, useEffect, useState } from "react";
 import styles from "../css/Login.module.css";
 import { Button, FormControl, TextField, Typography } from "@material-ui/core";
 import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
-const Login: FC = memo((props: any) => {
+const Login: React.FC = (props: any) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      user && props.history.push("/");
+    const unSub = auth.onAuthStateChanged((user) => {
+      user && navigate("/");
     });
+    return () => unSub();
   }, [props.history]);
 
   return (
@@ -54,19 +57,17 @@ const Login: FC = memo((props: any) => {
         onClick={
           isLogin
             ? async () => {
-                //Loginの場合
                 try {
                   await auth.signInWithEmailAndPassword(email, password);
-                  props.history.push("/");
+                  navigate("/");
                 } catch (error: any) {
                   alert(error.message);
                 }
               }
             : async () => {
-                // Sinupの場合
                 try {
                   await auth.createUserWithEmailAndPassword(email, password);
-                  props.history.push("/");
+                  navigate("/");
                 } catch (error: any) {
                   alert(error.message);
                 }
@@ -83,6 +84,6 @@ const Login: FC = memo((props: any) => {
       </Typography>
     </div>
   );
-});
+};
 
 export default Login;
