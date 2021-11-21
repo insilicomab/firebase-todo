@@ -1,5 +1,4 @@
-import React, { FC, useState } from "react";
-import firebase from "firebase/app";
+import React, { FC, memo, useState } from "react";
 import { ListItem, TextField, Grid } from "@material-ui/core";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -11,7 +10,7 @@ interface Props {
   title: string;
 }
 
-const TaskItem: FC<Props> = (props) => {
+const TaskItem: FC<Props> = memo((props) => {
   const [title, setTitle] = useState(props.title);
 
   const editTask = () => {
@@ -47,6 +46,6 @@ const TaskItem: FC<Props> = (props) => {
       </ListItem>
     </div>
   );
-};
+});
 
 export default TaskItem;
