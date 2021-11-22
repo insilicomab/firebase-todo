@@ -1,5 +1,5 @@
 import { FormControl, List, TextField } from "@material-ui/core";
-import React, { useState, useEffect, FC } from "react";
+import React, { useEffect, FC } from "react";
 import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
 import styles from "./css/App.module.css";
 import { db } from "./firebase";
@@ -8,6 +8,8 @@ import { makeStyles } from "@material-ui/core";
 import { auth } from "./firebase";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useNavigate } from "react-router-dom";
+
+import { useNewTask } from "./hooks/useNewTask";
 
 const useStyles = makeStyles({
   field: {
@@ -20,9 +22,8 @@ const useStyles = makeStyles({
   },
 });
 
-const App: FC = (props: any) => {
-  const [tasks, setTasks] = useState([{ id: "", title: "" }]);
-  const [input, setInput] = useState("");
+const App: FC = () => {
+  const { tasks, setTasks, input, setInput, newTask } = useNewTask();
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -44,11 +45,6 @@ const App: FC = (props: any) => {
     });
     return () => unSub();
   }, []);
-
-  const newTask = (e: React.MouseEvent<HTMLButtonElement>) => {
-    db.collection("tasks").add({ title: input });
-    setInput("");
-  };
 
   return (
     <div className={styles.app__root}>
