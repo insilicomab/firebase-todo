@@ -4,7 +4,7 @@ import { Button, FormControl, TextField, Typography } from "@material-ui/core";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
-const Login: React.FC = (props: any) => {
+const Login: FC = memo((props: any) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +15,7 @@ const Login: React.FC = (props: any) => {
       user && navigate("/");
     });
     return () => unSub();
-  }, [props.history]);
+  }, [navigate]);
 
   return (
     <div className={styles.login__root}>
@@ -84,6 +84,6 @@ const Login: React.FC = (props: any) => {
       </Typography>
     </div>
   );
-};
+});
 
 export default Login;
