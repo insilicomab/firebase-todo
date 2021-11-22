@@ -4,7 +4,7 @@ import { Button, FormControl, TextField, Typography } from "@material-ui/core";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
-const Login: FC = memo((props: any) => {
+const Login: FC = memo(() => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
